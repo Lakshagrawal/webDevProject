@@ -1,0 +1,23 @@
+.custom-card{
+    width: 18rem;
+    display: flex;
+}
+.custom-container{
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+
+.custom-card .card-img{
+    height: 24rem;
+}
+
+.card-body{
+    display: flex;
+    justify-content: space-between;
+}
+.edit-button{
+    width: 46%;
+}
