@@ -4,10 +4,11 @@ const { renderaddproduct,postAddProducts } = require("../controllers/productsCon
 const routes = express.Router();
 
 const bodyParser = require("body-parser");
+const { auth } = require("../middlewares/auth");
 routes.use(bodyParser.urlencoded({extended:true}));
 
 
-routes.get("/", renderaddproduct );
+routes.get("/",auth, renderaddproduct );
 
-routes.post("/",postAddProducts);
+routes.post("/",auth, postAddProducts);
 module.exports = routes;

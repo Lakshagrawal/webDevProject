@@ -5,6 +5,7 @@ const router = express.Router();
 
 
 const bodyParser = require("body-parser");
+const { auth } = require("../middlewares/auth");
 router.use(bodyParser.urlencoded({extended:true}))
 // router.use(cookieParser);
 
@@ -17,5 +18,5 @@ router.get("/login",renderlogin);
 
 router.post("/login",validateLogin);
 
-router.get("/logout",logout);
+router.get("/logout", auth ,logout);
 module.exports = router;

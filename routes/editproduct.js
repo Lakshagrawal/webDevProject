@@ -3,11 +3,12 @@ const { rendereditproduct, postEditProducts } = require("../controllers/products
 
 const routes = express.Router();
 const bodyParser = require("body-parser");
+const { auth } = require("../middlewares/auth");
 routes.use(bodyParser.urlencoded({extended:true}));
 
-routes.get("/:id", rendereditproduct );
+routes.get("/:id",auth, rendereditproduct );
 
-routes.post("/:id", postEditProducts);
+routes.post("/:id",auth, postEditProducts);
 
 
 module.exports = routes;

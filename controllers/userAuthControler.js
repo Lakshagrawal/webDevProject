@@ -1,7 +1,9 @@
 const Users = require("../models/user");
+const jwt = require("jsonwebtoken");
+
 exports.renderSignUp = (req,res)=>{
-    const cookies = req.session.isLoggedIn;
-    res.render("signup",{isLoggedIn:cookies});
+    // const cookies = req.session.isLoggedIn;
+    res.render("signup",{isLoggedIn:global.isLoggedIn});
 }
 
 exports.registerUser = (req,res)=>{
@@ -17,8 +19,8 @@ exports.registerUser = (req,res)=>{
 }
 
 exports.renderlogin = (req,res)=>{
-    const cookies = req.session.isLoggedIn;
-    res.render("login",{isLoggedIn:cookies});
+    // const cookies = req.session.isLoggedIn;
+    res.render("login",{isLoggedIn:global.isLoggedIn    });
 }
 
 exports.validateLogin = (req,res)=>{
@@ -29,14 +31,13 @@ exports.validateLogin = (req,res)=>{
         if(rows.length > 0){
             const user = rows[0];
             if(user.password === password){
-                req.session.isLoggedIn = "true";
+                const token = jwt.sign({isLoggedIn:"true"},"This is the secret");
+                req.session.token = token;
                 res.redirect("/");
             }else{
-                res.session.isLoggedIn = "invalidPassword";
                 res.redirect("/login");
             }
         }else{
-            res.session.isLoggedIn = "invalidUserName";
             res.redirect("/login");
         }
     })  
@@ -49,6 +50,6 @@ exports.logout = (req,res)=>{
     // req.session.isLoggedIn = "false";
 
     // this will remove the data from the database for that user
-    req.session.destroy(req.session.id  );
+    req.session.destroy(req.session.id );
     res.redirect('/');
 }

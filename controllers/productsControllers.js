@@ -14,31 +14,39 @@
 // ]
 
 const Products = require("../models/products");
+const jwt = require("jsonwebtoken");
 
 exports.renderProducts = (req,res)=>{
     // res.send("Wellcome to the home route");
     // const cookie = req.cookies;
-    const cookie = req.session.isLoggedIn;
-    console.log(cookie)
+
+    // taking the cookie from the user
+    // const cookie = req.session.isLoggedIn;
+
+    //using jwt to verifiying the token from the user
+    // const token  = req.session.token
+    // console.log(token)
+    // const cookie = jwt.verify(token,"This is the secret").isLoggedIn;  
+    // console.log(cookie)
     Products.fetchProduct().then(([rows,fieldData])=>{
         // console.log(rows);
         // console.log(fieldData);
-        return res.render("home", {products: rows, isLoggedIn: cookie});   
+        return res.render("home", {products: rows, isLoggedIn: global.isLoggedIn});   
     })
 }
  
 exports.renderaddproduct = (req,res)=>{
-    const cookie = req.session.isLoggedIn;
-    res.render('add-product',{isLoggedIn:cookie});
+    // const cookie = req.session.isLoggedIn;
+    res.render('add-product',{isLoggedIn:global.isLoggedIn});
 }
 
 exports.rendereditproduct = (req,res)=>{
-    const cookie = req.session.isLoggedIn;
+    // const cookie = req.session.isLoggedIn;
     const id = req.params.id;
     Products.fetchProductId(id).then(([[productdata], fieldData])=>{
         // console.log(productdata);
         // console.log(fieldData);
-        return res.render("edit-product", {product:productdata, isLoggedIn:cookie});
+        return res.render("edit-product", {product:productdata, isLoggedIn:global.isLoggedIn});
     });
 }
 
