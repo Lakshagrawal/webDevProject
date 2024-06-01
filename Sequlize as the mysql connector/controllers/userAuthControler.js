@@ -1,20 +1,30 @@
-const Users = require("../models/user");
+const User = require("../models/user");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const tokensignature = require("../utils/globals")
+
 
 exports.renderSignUp = (req,res)=>{
     // const cookies = req.session.isLoggedIn;
     res.render("signup",{isLoggedIn:global.isLoggedIn});
 }
 
-exports.registerUser = (req,res)=>{
-    // console.log(req.body)
-    const {userName, password, confirmPassword} = req.body;
+exports.registerUser = async(req,res)=>{
+    console.log(req.body)
+    try {
+        const {userName, password} = req.body;
+        const hashPassword = await bcrypt.hash(password,10);
 
-    const users = new Users(null,userName,password);
+        await User.create({
+            username:userName,
+            password: hashPassword
+        })
 
-    users.insertUser().then(()=>{
-        res.redirect("/");
-    });
+        return res.redirect("/");
+    } catch (err) {
+        console.log(err)
+    }
+   
 
 }
 
@@ -23,24 +33,32 @@ exports.renderlogin = (req,res)=>{
     res.render("login",{isLoggedIn:global.isLoggedIn    });
 }
 
-exports.validateLogin = (req,res)=>{
-    const {userName, password} = req.body;
-    Users.fetchUserByUsername(userName).then(([rows,fieldData])=>{
-        console.log(rows);
-        console.log(fieldData);
-        if(rows.length > 0){
-            const user = rows[0];
-            if(user.password === password){
-                const token = jwt.sign({isLoggedIn:"true"},"This is the secret");
+exports.validateLogin = async(req,res)=>{
+    try {
+        const {userName, password} = req.body;
+        const validateUser = await User.findOne({
+            where:{
+                username:userName
+            }
+        });
+        // console.log(validateUser);
+
+        if(validateUser){
+            const isMatch = await bcrypt.compare(password,validateUser.password);
+            if(isMatch){
+                const token = jwt.sign({userName},tokensignature);
                 req.session.token = token;
-                res.redirect("/");
+                return res.redirect("/");
             }else{
-                res.redirect("/login");
+                return res.redire("/login");
             }
         }else{
-            res.redirect("/login");
+            return res.redire("/login");
         }
-    })  
+    } catch (err) {
+        console.log(err)
+    }
+    
 }
 
 exports.logout = (req,res)=>{

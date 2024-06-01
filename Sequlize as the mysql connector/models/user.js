@@ -1,17 +1,24 @@
-const poll = require("../utils/database");
+const { DataTypes } = require("sequelize")
+const sequelize = require("../utils/database")
 
-module.exports = class Users{
-    constructor(id, userName, password){
-        this.id = id;
-        this.userName = userName;
-        this.password = password;
+const User = sequelize.define("user",{
+    id:{
+        type: DataTypes.INTEGER,
+        autoIncrement:true,
+        allowNull:false,
+        primaryKey:true,
+    },
+    username:{
+        type: DataTypes.STRING,
+        allowNull:false,
+    },
+    password:{
+        type: DataTypes.STRING,
+        allowNull:false,
     }
+},{
+    tableName:"users",
+    timestamps:false
+})
 
-    insertUser(){
-        return poll.execute("insert into Users (userName, password) values (?,?)" , [this.userName, this.password]);
-    }
-
-    static fetchUserByUsername(userName){
-        return poll.execute("select * from Users where userName = ?", [userName]);
-    }
-}
+module.exports = User;

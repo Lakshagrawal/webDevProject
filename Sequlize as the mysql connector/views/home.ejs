@@ -15,7 +15,7 @@
         <% if (products.length > 0) { %>
             <% products.forEach(product => { %> <!-- Corrected for loop syntax -->
                 <div class="card mx-auto mt-4 mb-4 custom-card">
-                    <img src="<%= "/public/images/" + product.img%>" class="card-img-top card-img" alt="<%= product.productname %>">
+                    <img src="<%= "/public/images/" + product.image%>" class="card-img-top card-img" alt="<%= product.productname %>">
                     <div class="card-body">
                         <h4 class="card-title"><%= product.productname %></h4> <!-- Corrected closing tag -->
                         <h4 class="card-titles">Rs.<%= product.price %></h4> <!-- Corrected EJS syntax -->

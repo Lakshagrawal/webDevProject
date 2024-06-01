@@ -4,6 +4,7 @@ const session = require("express-session");
 const MysqlStore = require("express-mysql-session")(session);
 const bcrypt = require("bcrypt");
 const multer = require("multer");
+const sequelize = require("./utils/database")
 // I have use img as the 'name' in the add-product and edit-product ejs
 const storage = multer.diskStorage({
     destination:(req,file, cb)=>{
@@ -59,7 +60,15 @@ app.set("view engine", "ejs");
 app.set("views", "views");
 
 const port = 3000;
+sequelize.authenticate().then(()=>{
+    
+    console.log("database is connected to the server");
+}).catch((err)=>{
+    console.log(err)
+})
 
-app.listen(port, ()=>{
-    console.log("server is running");
+sequelize.sync().then(()=>{
+    app.listen(port, ()=>{
+        console.log("server is running");
+    })
 })
