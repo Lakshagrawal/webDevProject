@@ -13,7 +13,7 @@ exports.auth = (req,res,next)=>{
         try {
             const decodeToken = jwt.verify(token,tokensignature);
             global.isLoggedIn = "true";
-            console.log(decodeToken);
+            // console.log(decodeToken);
         } catch (error) {
             if(global.isLoggedIn === "init"){
                 return next();

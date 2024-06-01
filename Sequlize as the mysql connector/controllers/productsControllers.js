@@ -52,7 +52,11 @@ exports.rendereditproduct = (req,res)=>{
 
 
 exports.postAddProducts = (req,res)=>{
-    const{productname,price,img} = req.body;
+    const{productname,price} = req.body;
+    const img =  req.file.filename;
+    console.log(req.body);
+
+    console.log(img);
 
     const obj = new Products(null, price,productname,img);
     // console.log(obj);
@@ -66,8 +70,10 @@ exports.postAddProducts = (req,res)=>{
 
 exports.postEditProducts = (req,res)=>{
     // console.log(req.body)
-    const{productname,price,img} = req.body;
+    const{productname,price} = req.body;
     const id = req.params.id;
+    const img =  req.file.filename;
+    console.log(img)
 
     const obj = new Products(id, price,productname,img);
     // console.log(obj);

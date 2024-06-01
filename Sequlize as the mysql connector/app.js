@@ -2,7 +2,19 @@ const express = require("express")
 const app = express();
 const session = require("express-session");
 const MysqlStore = require("express-mysql-session")(session);
+const bcrypt = require("bcrypt");
+const multer = require("multer");
+// I have use img as the 'name' in the add-product and edit-product ejs
+const storage = multer.diskStorage({
+    destination:(req,file, cb)=>{
+        cb(null, path.join(__dirname, 'public', 'images'));
+    },
+    filename : (req,file,cb)=>{
+        cb(null,  (new Date().toISOString().replace(/:/g, '-') + '-') + file.originalname); 
+    }
+});
 
+app.use(multer({storage}).single("img"));
 
 const home = require("./routes/home")
 const addproduct = require("./routes/addproduct");
